@@ -1,0 +1,11 @@
+FROM oaisoftwarealliance/trf-gen-cn5g:latest
+
+RUN apt update && apt install -y software-properties-common
+
+RUN add-apt-repository ppa:deadsnakes/ppa
+
+RUN apt update && apt install -y python3.12 python3-pip
+
+RUN pip install -U pip torch transformers Pillow 
+
+RUN pip install "fastapi[standard]"
