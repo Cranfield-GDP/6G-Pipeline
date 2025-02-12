@@ -32,3 +32,29 @@ cd 6G-Pipeline/oai_stack/traffic_steering_demo
 docker compose -f docker-compose-core.yaml down --remove-orphans
 docker compose -f docker-compose-core.yaml up -d
 ```
+
+<strong>Important</strong> After the start of the core network, wait for at least 20 seconds to ensure all the network functions are intiailized, before starting the RAN and UEs.
+
+<strong>Important</strong> the two sets of UEs have to be started one after another to avoid conflicts caused by currently-unknown issues...
+
+### start the first RAN/UE1
+```bash
+cd 6G-Pipeline/oai_stack/traffic_steering_demo
+docker compose -f docker-compose-ran-ue.yaml up gnbsim-vpp -d
+```
+
+Wait for at least 10 seconds before starting the second RAN/UE2.
+
+### start the second RAN/UE2
+```bash
+cd 6G-Pipeline/oai_stack/traffic_steering_demo
+docker compose -f docker-compose-ran-ue.yaml up gnbsim-vpp2 -d
+```
+
+### Verify the entire stack
+Check the log of UE1 and UE2, and by right, UE1 should have an IP address of `12.1.1.2` and UE2 should have an IP address of `12.1.1.3`. 
+
+```bash
+docker exec -it gnbsim-vpp bash
+ip a | grep 12.1.1
+```
