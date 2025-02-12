@@ -25,7 +25,9 @@ internet-scenario:
 
 ### PCC Rules
 
-the PCC rules combines associates a flow rule and a precedence value to a traffic rule, e.g.,   
+PCC is a mechanism used to:
+- Enforce policies: Control the quality of service (QoS), traffic prioritization, and access to network resources.
+- Manage charging: Apply charging rules based on usage, service type, or other criteria.
 
 ```yaml
 internet-rule:
@@ -59,7 +61,7 @@ decision_supi2:
   supi_imsi: '208950000000032'
 ```
 
-with the above policy decision, UE1 (...00031) only has access to the `internet` data network while UE2 (...00032) will have access to both `internet` and `edge`.  
+with the above policy decision, UE1 (...00031) only has access to the `internet` data network while UE2 (...00032) will have access to both `internet` and `edge`.
 
 ### Speciail notes on the policy rules
 If the policy is defined as below, then the second policy about the edge will be ignored by the PCF and the `31` UE will only be able to access the internet but not the edge server.
