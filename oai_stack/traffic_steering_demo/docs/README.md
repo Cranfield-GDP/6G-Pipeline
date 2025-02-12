@@ -65,3 +65,4 @@ Documentations
 
 ### Policy Control Function:
 * [PCF_SBI.md](PCF_SBI.md) introduces the service-based interface for the Policy Control Function.
+* [PCF_POLICY_CONFIG.md](PCF_POLICY_CONFIG.md) explains how to configure the PCF policies for traffic steering.
