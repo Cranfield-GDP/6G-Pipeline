@@ -9,12 +9,13 @@ cd "$SCRIPT_DIR/../.."
 # Print the current working directory to verify
 echo "Current directory: $(pwd)"
 
-# Start the 5G core
-echo "Starting the 5G core..."
-docker compose -f docker-compose-core.yaml up -d
+# Start the RAN
+echo "Starting the RAN-1 (UE + gNB)"
+docker compose -f docker-compose-ran-ue.yaml up gnbsim-vpp -d
+echo "Sleeping for 10 seconds"
+sleep 10
 
-# Wait for 15 seconds
-echo "Waiting for 15 seconds..."
-sleep 15
+echo "Starting the RAN-2 (UE + gNB)"
+docker compose -f docker-compose-ran-ue.yaml up gnbsim-vpp2 -d
 
 echo "Done!"
