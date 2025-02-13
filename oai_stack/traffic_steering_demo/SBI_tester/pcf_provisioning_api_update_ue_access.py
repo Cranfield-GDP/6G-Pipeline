@@ -32,19 +32,20 @@ def http2_put_json(url, data):
         else:
             return None
 
-UE_supi = "imsi-208950000000031"
+UE_supi = "imsi-208950000000032"
 url = f"{provisioning_base_url}/supiPolicyDecision/{UE_supi}"
 
-# print("\n---------- GET supiPolicyDecision for UE1 ------------")
-# print(url)
-# res = http2_get_json(url)
-# print(res)
+print("\n---------- GET supiPolicyDecision for UE2 ------------")
+print(url)
+res = http2_get_json(url)
+print(res)
 
-print("\n---------- PUT supiPolicyDecision for UE1 ------------")
+print("\n---------- PUT supiPolicyDecision for UE2 ------------")
 data = {
     "supi": UE_supi,
-    "pccRuleIds": ["internet-rule", "edge-rule"]
+    "pccRuleIds": ["edge-rule", "internet-rule"]
 }
+print(url)
 print(json.dumps(data))
 res = http2_put_json(url, data)
 print(res)

@@ -310,7 +310,9 @@ below is an example for single UE with two PCC rules:
 Policy Decision Provisioning API
 ---
 
-Check out the test scripts at [pcf_provisioning_endpoint.py](../SBI_tester//pcf_provisioning_endpoint.py) for more details.
+Check out the test scripts at [pcf_provisioning_endpoint.py](../SBI_tester//pcf_provisioning_endpoint.py) for GET request examples.
+
+Check out the test scripts at [pcf_provisioning_api_update_ue_access.py](../SBI_tester//pcf_provisioning_api_update_ue_access.py) for PUT request examples.
 
 References
 --- 
