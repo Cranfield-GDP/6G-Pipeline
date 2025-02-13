@@ -50,5 +50,5 @@ VALUES
 INSERT INTO `SupiPolicyDecision_PccRuleIds` (`object_id`, `index`, `value`)
 VALUES
   ('imsi-208950000000031', 0, 'internet-rule'),
-  ('imsi-208950000000032', 0, 'edge-rule'),
-  ('imsi-208950000000032', 1, 'internet-rule');
+  ('imsi-208950000000032', 0, 'internet-rule');
+  -- ('imsi-208950000000032', 1, 'internet-rule');
