@@ -123,7 +123,7 @@ services:
                 ipv4_address: 192.168.70.133
     oai-pcf:
         container_name: "oai-pcf"
-        image: oai-pcf:local
+        image: udhay707/oai-pcf:local
         ports:
             - "13980:8080"
         expose:
@@ -301,7 +301,7 @@ services:
             public_net_core12:
                 ipv4_address: 192.168.75.160
     oai-ext-dn-edge:
-        image: trf-gen-cn5g:local
+        image: udhay707/trf-gen-cn5g:local
         privileged: true
         init: true
         container_name: "oai-ext-dn-edge"

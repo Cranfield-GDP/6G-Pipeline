@@ -41,7 +41,7 @@ services:
             retries: 5
     gnbsim-vpp2:
         container_name: gnbsim-vpp2
-        image: gnbsim:local
+        image: udhay707/gnbsim:local
         privileged: true
         environment:
             - MCC=208
