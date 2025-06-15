@@ -1,0 +1,1 @@
+This folder keeps example xApps that can be executed within the FlexRIC container.

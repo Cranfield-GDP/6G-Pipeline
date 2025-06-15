@@ -15,7 +15,7 @@ decision_slice:
 decision_supi1:
   pcc_rules:
   - internet-rule
-  # - edge-rule
+  - edge-rule
   supi_imsi: '208950000000031'
 decision_supi2:
   pcc_rules:

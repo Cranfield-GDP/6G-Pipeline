@@ -56,3 +56,14 @@ print(json.dumps(data))
 res = send_http2_to_pcf(url, "PUT", data = data, restart = False)
 print(res)
 
+print("\n---------- PUT supiPolicyDecision for UE2 ------------")
+
+print(url)
+print(json.dumps(data))
+res = send_http2_to_pcf(url, "PUT", data = {
+    "supi": UE_supi,
+    "pccRuleIds": ["edge-rule", "internet-rule"]
+}, restart = False)
+
+
+

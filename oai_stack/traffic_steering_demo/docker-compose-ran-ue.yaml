@@ -1,85 +1,88 @@
 services:
-    gnbsim-vpp:
-        container_name: gnbsim-vpp
-        image: rohankharade/gnbsim:latest
+    oai-flexric:
+        image: oaisoftwarealliance/oai-flexric:develop
         privileged: true
+        container_name: oai-flexric
+        networks:
+            public_net:
+                ipv4_address: 192.168.70.150
+        volumes:
+            - ./conf/flexric.conf:/usr/local/etc/flexric/flexric.conf
+            # - sharedXappLibs:/usr/local/lib/flexric/
+            - ./ric/xapp_py:/usr/local/flexric/xApp/python3_dev
+        healthcheck:
+            test: /bin/bash -c "pgrep nearRT-RIC"
+            interval: 10s
+            timeout: 5s
+    # br-flexric:
+    #     image: br_flexric:local
+    #     privileged: true
+    #     container_name: br-flexric
+    #     networks:
+    #         public_net:
+    #             ipv4_address: 192.168.70.150
+    #     volumes:
+    #         - ./ric/ric.conf:/usr/local/etc/flexric/ric.conf
+    #         - ./ric/xapp_py:/usr/local/flexric/xApp/python3_dev
+    #     # command: sleep infinity
+    #     healthcheck:
+    #         test: /bin/bash -c "pgrep nearRT-RIC"
+    #         interval: 10s
+    #         timeout: 5s
+    oai-gnb:
+        image: oaisoftwarealliance/oai-gnb:develop
+        privileged: true
+        container_name: oai-gnb
         environment:
-            - MCC=208
-            - MNC=95
-            - GNBID=5
-            - TAC=0x00a000
-            - SST=222
-            - SD=00007b
-            - PagingDRX=v32
-            - RANUENGAPID=0
-            - IMEISV=35609204079514
-            - MSIN=0000000031
-            - RoutingIndicator=1234
-            - ProtectionScheme=null
-            - KEY=0C0A34601D4F07677303652C0462535B
-            - OPc=63bfa50ee6523365ff14c1f45f88737d
-            - DNN=default
-            - URL=http://www.asnt.org:8080/
-            - NRCellID=1
-            - USE_FQDN=no
-#           - USE_FQDN=yes
-#           - AMF_FQDN=amf.oai-5gc.eur
-            - NGAPPeerAddr=192.168.70.132
-            - GTPuLocalAddr=192.168.72.141
-            - GTPuIFname=eth1
-#           - DEREG_AFTER=20 # Deregister UE after 20 Sec
-            - DISPLAY=host.docker.internal:0
+            USE_ADDITIONAL_OPTIONS: --sa -E --rfsim --log_config.global_log_options level,nocolor,time
         networks:
             public_net:
                 ipv4_address: 192.168.70.141
             public_net_access:
                 ipv4_address: 192.168.72.141
+        volumes:
+            - ./conf/gnb.sa.band78.106prb.rfsim.flexric.conf:/opt/oai-gnb/etc/gnb.conf
+            - ./conf/channelmod_rfsimu.conf:/opt/oai-gnb/etc/channelmod_rfsimu.conf
         healthcheck:
-            test: /bin/bash -c "ip address show dev gtp-gnb"
+            test: /bin/bash -c "pgrep nr-softmodem"
             interval: 10s
             timeout: 5s
             retries: 5
-    gnbsim-vpp2:
-        container_name: gnbsim-vpp2
-        image: gnbsim:local
+    oai-nr-ue-1:
+        image: oaisoftwarealliance/oai-nr-ue:develop
         privileged: true
-        environment:
-            - MCC=208
-            - MNC=95
-            - GNBID=6
-            - TAC=0x00a000
-            - SST=222
-            - SD=00007b
-            - PagingDRX=v32
-            - RANUENGAPID=0
-            - IMEISV=35609204079514
-            - MSIN=0000000032
-            - RoutingIndicator=1234
-            - ProtectionScheme=null
-            - KEY=0C0A34601D4F07677303652C0462535B
-            - OPc=63bfa50ee6523365ff14c1f45f88737d
-            - DNN=default
-            - URL=http://www.asnt.org:8080/
-            - NRCellID=1
-            - USE_FQDN=no
-#           - USE_FQDN=yes
-#           - AMF_FQDN=amf.oai-5gc.eur
-            - NGAPPeerAddr=192.168.70.132
-            - GTPuLocalAddr=192.168.72.142
-            - GTPuIFname=eth1
-#           - DEREG_AFTER=20 # Deregister UE after 20 Sec
-        volumes:
-            - ./edge_ai_clients:/edge_ai_clients
+        container_name: oai-nr-ue-1
+        environment: 
+            USE_ADDITIONAL_OPTIONS: -E --rfsim -r 106 --numerology 1 --uicc0.imsi 208950000000031 -C 3619200000 --rfsimulator.serveraddr 192.168.70.141 --log_config.global_log_options level,nocolor,time
         networks:
             public_net:
                 ipv4_address: 192.168.70.142
-            public_net_access:
-                ipv4_address: 192.168.72.142
+        volumes:
+            - ./conf/ue.conf:/opt/oai-nr-ue/etc/nr-ue.conf
         healthcheck:
-            test: /bin/bash -c "ip address show dev gtp-gnb"
+            test: /bin/bash -c "pgrep nr-uesoftmodem"
             interval: 10s
             timeout: 5s
             retries: 5
+    oai-nr-ue-2:
+        image: oaisoftwarealliance/oai-nr-ue:develop
+        privileged: true
+        container_name: oai-nr-ue-2
+        environment: 
+            USE_ADDITIONAL_OPTIONS: -E --rfsim -r 106 --numerology 1 --uicc0.imsi 208950000000032 -C 3619200000 --rfsimulator.serveraddr 192.168.70.141 --log_config.global_log_options level,nocolor,time
+        networks:
+            public_net:
+                ipv4_address: 192.168.70.143
+        volumes:
+            - ./conf/ue.conf:/opt/oai-nr-ue/etc/nr-ue.conf
+        healthcheck:
+            test: /bin/bash -c "pgrep nr-uesoftmodem"
+            interval: 10s
+            timeout: 5s
+            retries: 5
+
+# volumes:
+#     sharedXappLibs:
 
 networks:
     public_net:

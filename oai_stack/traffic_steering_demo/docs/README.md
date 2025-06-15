@@ -14,8 +14,11 @@ Since we will be using the SBI of the PCF, we need to have a local PCF image tha
 ### setup the local edge container image
 Since we will be deploying AI RESE API servers within the edge container, we need to install all the AI server-related dependencies (e.g., fastapi, torch, transformers, pillow etc.) beforehand. Refer to [LOCAL_EDGE_SETUP.md](LOCAL_EDGE_SETUP.md) to setup the local edge docker image.
 
-### setup the local RAN/UE container image
-Since we will be running a REST API client from the UE to invoke AI services deployed in the edge container, we need also install some dependencies such as requests. Refer to [LOCAL_RAN_UE_SETUP.md](LOCAL_RAN_UE_SETUP.md) to setup the local RAN/UE docker image.
+### setup the local UE container image
+Since we will be running a REST API client from the UE to invoke AI services deployed in the edge container, we need also install some dependencies such as requests. Refer to [LOCAL_UE_SETUP.md](LOCAL_UE_SETUP.md) to setup the local UE docker image.
+
+### setup the local RIC container image
+Instead of using official `oaisoftwarealliance/oai-flexric:develop` image, we will build our local flexRIC image based on the `br-flexric` branch, which is maintained by BubbleRAN. Refer to [LOCAL_RIC_SETUP.md](LOCAL_RIC_SETUP.md) to setup the local RIC docker image.  
 
 ### pull the remaining docker images
 ```bash
@@ -37,25 +40,39 @@ docker compose -f docker-compose-core.yaml up -d
 
 <strong>Important</strong> the two sets of UEs have to be started one after another to avoid conflicts caused by currently-unknown issues...
 
-### start the first RAN/UE1
+### start the RAN Intelligent Controller (FlexRic)
 ```bash
 cd 6G-Pipeline/oai_stack/traffic_steering_demo
-docker compose -f docker-compose-ran-ue.yaml up gnbsim-vpp -d
+docker compose -f docker-compose-ran-ue.yaml up oai-flexric -d
 ```
 
-Wait for at least 10 seconds before starting the second RAN/UE2.
-
-### start the second RAN/UE2
+### start the RAN
 ```bash
 cd 6G-Pipeline/oai_stack/traffic_steering_demo
-docker compose -f docker-compose-ran-ue.yaml up gnbsim-vpp2 -d
+docker compose -f docker-compose-ran-ue.yaml up oai-gnb -d
+```
+
+Wait for at least 10 seconds before starting the first UE.
+
+### start the first UE
+```bash
+cd 6G-Pipeline/oai_stack/traffic_steering_demo
+docker compose -f docker-compose-ran-ue.yaml up oai-nr-ue-1 -d
+```
+
+Wait for at least 10 seconds before starting the second UE.
+
+### start the second UE
+```bash
+cd 6G-Pipeline/oai_stack/traffic_steering_demo
+docker compose -f docker-compose-ran-ue.yaml up oai-nr-ue-2 -d
 ```
 
 ### Verify the entire stack
 Check the log of UE1 and UE2, and by right, UE1 should have an IP address of `12.1.1.2` and UE2 should have an IP address of `12.1.1.3`. 
 
 ```bash
-docker exec -it gnbsim-vpp bash
+docker exec -it oai-nr-ue-1 bash
 ip a | grep 12.1.1
 ```
 
